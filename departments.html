@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yara Baptist Church - Departments</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", Arial, sans-serif;
+            color: #ffffff;
+            background: linear-gradient(135deg, #002b5c, #004aad, #0066cc);
+        }
+        header {
+            background: rgba(0,0,0,0.35);
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+        header h2 {
+            margin: 0;
+            font-size: 36px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        nav a:hover { background: rgba(255,255,255,0.2); }
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+        h2.section-title { font-size: 32px; margin-bottom: 30px; }
+        .dept-card {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .dept-card h3 { margin-bottom: 10px; }
+        .dept-card p { margin-bottom: 15px; }
+        .dept-card a {
+            display: inline-block;
+            padding: 8px 12px;
+            background: #ffd700;
+            color: #000;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        footer { text-align: center; margin-top: 50px; font-size: 15px; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>YARA BAPTIST CHURCH</h2>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="departments.html">Departments</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2 class="section-title">Departments</h2>
+
+    <!-- Men Department (Password Protected) -->
+    <div class="dept-card">
+        <h3>Men</h3>
+        <p>Engaging men in fellowship, leadership, and spiritual growth activities.</p>
+        <a href="#" onclick="openMenDept()">View Men Department</a>
+    </div>
+
+    <!-- Women Department -->
+    <div class="dept-card">
+        <h3>Women</h3>
+        <p>Empowering women through fellowship and spiritual growth activities.</p>
+        <a href="women.html">View Women Department</a>
+    </div>
+
+    <!-- Youth Department -->
+    <div class="dept-card">
+        <h3>Youth</h3>
+        <p>Engaging young people in worship, learning, and community service.</p>
+        <a href="youth.html">View Youth Department</a>
+    </div>
+
+    <!-- Children Department -->
+    <div class="dept-card">
+        <h3>Children</h3>
+        <p>Providing children with biblical teaching and fun activities.</p>
+        <a href="children.html">View Children Department</a>
+    </div>
+</div>
+
+<footer>&copy; 2025 Yara Baptist Church — Growing in Grace ✝️</footer>
+
+<script>
+function openMenDept() {
+    const password = prompt("Enter password to access Men Department:");
+    if(password === "men2025") {
+        window.location.href = "men.html";
+    } else {
+        alert("Incorrect password! Access denied.");
+    }
+}
+</script>
+
+</body>
+</html>

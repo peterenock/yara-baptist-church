@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Yara Baptist Church - Men Department</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{margin:0;padding:0;font-family:"Poppins",Arial,sans-serif;background:linear-gradient(135deg,#002b5c,#004aad,#0066cc);color:#fff;}
+header{background:rgba(0,0,0,0.35);padding:20px;text-align:center;backdrop-filter:blur(5px);}
+header h2{margin:0;font-size:36px;}
+nav a{color:#fff;text-decoration:none;margin:0 15px;font-size:18px;padding:8px 14px;border-radius:8px;transition:0.3s;}
+nav a:hover{background:rgba(255,255,255,0.2);}
+.container{max-width:1000px;margin:50px auto;padding:0 20px;text-align:center;}
+h2.section-title{font-size:32px;margin-bottom:30px;}
+.content-box{background:rgba(255,255,255,0.15);padding:20px;border-radius:15px;line-height:1.6em;margin-bottom:20px;}
+.events, .announcements{margin:30px auto;padding:20px;border-radius:15px;background:rgba(255,255,255,0.15);}
+.events h3,.announcements h3{text-align:center;margin-bottom:15px;}
+.event-cards{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;}
+.event-card{background:rgba(255,255,255,0.25);padding:15px;border-radius:15px;width:220px;transition:0.3s;text-align:center;}
+.event-card:hover{background:rgba(255,255,255,0.35);transform:scale(1.05);}
+input,textarea{padding:8px;border-radius:5px;border:none;margin:5px 0;width:90%;}
+button{padding:8px 15px;border:none;border-radius:5px;background:#ffd700;cursor:pointer;margin-top:5px;}
+footer{text-align:center;margin-top:50px;font-size:15px;opacity:0.6;}
+@media(max-width:768px){.event-cards{flex-direction:column;align-items:center;}}
+</style>
+</head>
+<body>
+
+<header>
+<h2>YARA BAPTIST CHURCH</h2>
+<nav>
+<a href="index.html">Home</a>
+<a href="departments.html">Departments</a>
+<a href="men.html">Men</a>
+</nav>
+</header>
+
+<div class="container">
+<h2 class="section-title">Men's Department</h2>
+
+<div class="content-box">
+<h3>Purpose</h3>
+<p>Engaging men in fellowship, leadership, and spiritual growth activities.</p>
+</div>
+
+<div class="content-box">
+<h3>Weekly Meetings</h3>
+<p>Every Saturday at 8:00 AM in the church main hall.</p>
+</div>
+
+<!-- PASSWORD PROTECTION -->
+<script>
+const PASSWORD = "men2025";
+const entered = prompt("Enter password to access Men Department:");
+if(entered !== PASSWORD){
+    alert("Incorrect password! Redirecting to Departments page.");
+    window.location.href = "departments.html";
+}
+</script>
+
+<!-- ANNOUNCEMENTS -->
+<div class="announcements">
+<h3>Announcements / Important Info</h3>
+<textarea id="announcementInput" placeholder="Add important info or announcement"></textarea><br>
+<button onclick="addAnnouncement()">Add Announcement</button>
+<div id="announcementList" style="margin-top:15px;"></div>
+</div>
+
+<!-- EVENTS -->
+<div class="events">
+<h3>Men's Upcoming Events</h3>
+<input type="text" id="eventTitle" placeholder="Event Title"><br>
+<input type="text" id="eventTime" placeholder="Event Time / Date"><br>
+<button onclick="addEvent()">Add Event</button>
+<div class="event-cards" id="eventCards"></div>
+<button onclick="sendToHome()" style="background:#00ff7f;color:#000;margin-top:15px;">Send Selected Events to Church Home Page</button>
+</div>
+
+</div>
+
+<footer>&copy; 2025 Yara Baptist Church — Growing in Grace ✝️</footer>
+
+<script>
+// Dynamic Men Events
+let events = [
+    {title:"Men's Fellowship", time:"Every Saturday 8:00 AM"}
+];
+const eventContainer = document.getElementById("eventCards");
+function renderEvents(){
+    eventContainer.innerHTML="";
+    events.forEach((ev,index)=>{
+        const card=document.createElement("div");
+        card.className="event-card";
+        card.innerHTML=`<h4>${ev.title}</h4><p>${ev.time}</p>
+        <button onclick="removeEvent(${index})" style="background:red;color:white;">Remove</button>
+        <br><input type="checkbox" id="push${index}" style="margin-top:5px;"> Send to Church Home`;
+        eventContainer.appendChild(card);
+    });
+}
+function addEvent(){
+    const title=document.getElementById("eventTitle").value.trim();
+    const time=document.getElementById("eventTime").value.trim();
+    if(title && time){
+        events.push({title,time});
+        document.getElementById("eventTitle").value="";
+        document.getElementById("eventTime").value="";
+        renderEvents();
+    } else { alert("Please enter both title and time"); }
+}
+function removeEvent(index){ events.splice(index,1); renderEvents(); }
+renderEvents();
+
+// Dynamic Announcements
+let announcements = [];
+const announcementList = document.getElementById("announcementList");
+function renderAnnouncements(){
+    announcementList.innerHTML="";
+    announcements.forEach((ann,index)=>{
+        const div=document.createElement("div");
+        div.style.background="rgba(255,255,255,0.2)";
+        div.style.padding="10px"; div.style.marginBottom="10px"; div.style.borderRadius="8px";
+        div.innerHTML=`${ann} <button onclick="removeAnnouncement(${index})" style="background:red;color:white;padding:3px 8px;border:none;border-radius:5px;float:right;">Remove</button>`;
+        announcementList.appendChild(div);
+    });
+}
+function addAnnouncement(){
+    const text=document.getElementById("announcementInput").value.trim();
+    if(text){ announcements.push(text); document.getElementById("announcementInput").value=""; renderAnnouncements(); }
+    else{ alert("Please type an announcement"); }
+}
+function removeAnnouncement(index){ announcements.splice(index,1); renderAnnouncements(); }
+
+// SEND EVENTS TO HOME PAGE
+function sendToHome(){
+    let sentCount=0;
+    events.forEach((ev,index)=>{
+        const checkbox=document.getElementById(`push${index}`);
+        if(checkbox && checkbox.checked){
+            let homeEvents = JSON.parse(localStorage.getItem("homeEvents")) || [];
+            homeEvents.push(ev);
+            localStorage.setItem("homeEvents", JSON.stringify(homeEvents));
+            checkbox.checked=false;
+            sentCount++;
+        }
+    });
+    if(sentCount>0) alert(sentCount+" event(s) sent to Church Home Page!");
+    else alert("Select at least one event to send.");
+}
+</script>
+
+</body>
+</html>
