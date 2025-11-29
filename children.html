@@ -12,8 +12,8 @@ nav a{color:#fff;text-decoration:none;margin:0 15px;font-size:18px;padding:8px 1
 nav a:hover{background:rgba(255,255,255,0.2);}
 .container{max-width:1000px;margin:50px auto;padding:0 20px;text-align:center;}
 .content-box{background:rgba(255,255,255,0.15);padding:20px;border-radius:15px;line-height:1.6em;margin-bottom:20px;}
-.events, .announcements{margin:30px auto;padding:20px;border-radius:15px;background:rgba(255,255,255,0.15);}
-.events h3,.announcements h3{text-align:center;margin-bottom:15px;}
+.events, .announcements, .registration{margin:30px auto;padding:20px;border-radius:15px;background:rgba(255,255,255,0.15);}
+.events h3,.announcements h3,.registration h3{text-align:center;margin-bottom:15px;}
 .event-cards{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;}
 .event-card{background:rgba(255,255,255,0.25);padding:15px;border-radius:15px;width:220px;transition:0.3s;text-align:center;}
 .event-card:hover{background:rgba(255,255,255,0.35);transform:scale(1.05);}
@@ -31,15 +31,21 @@ footer{text-align:center;margin-top:50px;font-size:15px;opacity:0.6;}
 <a href="index.html">Home</a>
 <a href="departments.html">Departments</a>
 <a href="children.html">Children</a>
+<a href="attendance.html">Attendance</a>
 </nav>
 </header>
 
 <div class="container">
-<h2 class="section-title">Children's Department</h2>
+<h2 class="section-title">Children Department</h2>
 
 <div class="content-box">
 <h3>Purpose</h3>
-<p>Nurturing children in faith, love, and spiritual growth through fun and engaging activities.</p>
+<p>Engaging children in fellowship, learning, and spiritual growth activities.</p>
+</div>
+
+<div class="content-box">
+<h3>Weekly Meetings</h3>
+<p>Every Sunday at 10:00 AM in the church main hall.</p>
 </div>
 
 <!-- PASSWORD PROTECTION -->
@@ -52,6 +58,15 @@ if(entered !== PASSWORD){
 }
 </script>
 
+<!-- MEMBER REGISTRATION -->
+<div class="registration">
+<h3>Register as a Child Member</h3>
+<input type="text" id="childName" placeholder="Child Full Name"><br>
+<input type="date" id="childDOB" placeholder="Date of Birth"><br>
+<input type="text" id="parentName" placeholder="Parent/Guardian Name" required><br>
+<button onclick="registerChild()">Register</button>
+</div>
+
 <!-- ANNOUNCEMENTS -->
 <div class="announcements">
 <h3>Announcements / Important Info</h3>
@@ -62,7 +77,7 @@ if(entered !== PASSWORD){
 
 <!-- EVENTS -->
 <div class="events">
-<h3>Children's Upcoming Events</h3>
+<h3>Children Upcoming Events</h3>
 <input type="text" id="eventTitle" placeholder="Event Title"><br>
 <input type="text" id="eventTime" placeholder="Event Time / Date"><br>
 <button onclick="addEvent()">Add Event</button>
@@ -75,8 +90,25 @@ if(entered !== PASSWORD){
 <footer>&copy; 2025 Yara Baptist Church — Growing in Grace ✝️</footer>
 
 <script>
-// Children Events
-let events = [{title:"Children's Sunday School", time:"Every Sunday 9:30 AM"}];
+// ====== CHILD REGISTRATION ======
+function registerChild(){
+    const name = document.getElementById("childName").value.trim();
+    const dob = document.getElementById("childDOB").value.trim();
+    const parent = document.getElementById("parentName").value.trim();
+    if(!name || !dob || !parent){ alert("All fields are required."); return; }
+
+    let childrenMembers = JSON.parse(localStorage.getItem("childrenMembers")) || [];
+    childrenMembers.push({name, dob, parent});
+    localStorage.setItem("childrenMembers", JSON.stringify(childrenMembers));
+
+    alert("Child member registered successfully!");
+    document.getElementById("childName").value = "";
+    document.getElementById("childDOB").value = "";
+    document.getElementById("parentName").value = "";
+}
+
+// ====== EVENTS ======
+let events = JSON.parse(localStorage.getItem("childrenEvents")) || [{title:"Children Sunday School", time:"Every Sunday 10:00 AM"}];
 const eventContainer = document.getElementById("eventCards");
 function renderEvents(){
     eventContainer.innerHTML="";
@@ -94,16 +126,21 @@ function addEvent(){
     const time=document.getElementById("eventTime").value.trim();
     if(title && time){
         events.push({title,time});
+        localStorage.setItem("childrenEvents", JSON.stringify(events));
         document.getElementById("eventTitle").value="";
         document.getElementById("eventTime").value="";
         renderEvents();
     } else { alert("Please enter both title and time"); }
 }
-function removeEvent(index){ events.splice(index,1); renderEvents(); }
+function removeEvent(index){
+    events.splice(index,1);
+    localStorage.setItem("childrenEvents", JSON.stringify(events));
+    renderEvents();
+}
 renderEvents();
 
-// Announcements
-let announcements=[];
+// ====== ANNOUNCEMENTS ======
+let announcements = JSON.parse(localStorage.getItem("childrenAnnouncements")) || [];
 const announcementList=document.getElementById("announcementList");
 function renderAnnouncements(){
     announcementList.innerHTML="";
@@ -117,20 +154,28 @@ function renderAnnouncements(){
 }
 function addAnnouncement(){
     const text=document.getElementById("announcementInput").value.trim();
-    if(text){ announcements.push(text); document.getElementById("announcementInput").value=""; renderAnnouncements(); }
-    else{ alert("Please type an announcement"); }
+    if(text){
+        announcements.push(text);
+        localStorage.setItem("childrenAnnouncements", JSON.stringify(announcements));
+        document.getElementById("announcementInput").value="";
+        renderAnnouncements();
+    } else { alert("Please type an announcement"); }
 }
-function removeAnnouncement(index){ announcements.splice(index,1); renderAnnouncements(); }
+function removeAnnouncement(index){
+    announcements.splice(index,1);
+    localStorage.setItem("childrenAnnouncements", JSON.stringify(announcements));
+    renderAnnouncements();
+}
 
-// Send to homepage
+// ====== SEND EVENTS TO HOME ======
 function sendToHome(){
     let sentCount=0;
     events.forEach((ev,index)=>{
         const checkbox=document.getElementById(`push${index}`);
         if(checkbox && checkbox.checked){
-            let homeEvents=JSON.parse(localStorage.getItem("childrenHomeEvents"))||[];
+            let homeEvents = JSON.parse(localStorage.getItem("childrenHomeEvents")) || [];
             homeEvents.push(ev);
-            localStorage.setItem("childrenHomeEvents",JSON.stringify(homeEvents));
+            localStorage.setItem("childrenHomeEvents", JSON.stringify(homeEvents));
             checkbox.checked=false;
             sentCount++;
         }

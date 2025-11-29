@@ -5,39 +5,201 @@
 <title>Yara Baptist Church</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body{margin:0;padding:0;font-family:"Poppins",Arial,sans-serif;color:#fff;background:linear-gradient(135deg,#002b5c,#004aad,#0066cc);background-size:300% 300%;animation:gradientMove 12s ease infinite;}
-@keyframes gradientMove{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-header{background:rgba(0,0,0,0.35);padding:20px;text-align:center;backdrop-filter:blur(5px);}
-header h2{margin:0;font-size:40px;letter-spacing:2px;font-weight:800;}
-.logo{width:120px;height:120px;margin-top:15px;border-radius:50%;border:3px solid #fff;object-fit:cover;}
-nav{margin-top:15px;}
-nav a{color:#fff;text-decoration:none;margin:0 15px;font-size:18px;padding:8px 14px;border-radius:8px;transition:0.3s;}
-nav a:hover{background:rgba(255,255,255,0.2);}
-.container{text-align:center;margin-top:50px;padding:20px;}
-.title{font-size:48px;font-weight:bold;margin-bottom:10px;text-transform:uppercase;}
-.subtitle{font-size:22px;font-weight:300;opacity:0.9;margin-bottom:40px;}
-.scripture-box{background:rgba(255,255,255,0.15);padding:30px;width:75%;margin:auto;border-radius:15px;box-shadow:0 0 20px rgba(0,0,0,0.3);font-style:italic;line-height:1.7em;font-size:22px;backdrop-filter:blur(6px);min-height:150px;}
-.scripture-ref{margin-top:15px;font-size:18px;text-align:right;font-weight:600;}
-.events-section{margin-top:50px;}
-.event-card{background:rgba(255,255,255,0.15);padding:15px;margin:15px auto;width:80%;border-radius:12px;text-align:center;position:relative;}
-.event-card h4{margin-bottom:8px;}
-.event-card button{position:absolute;top:10px;right:10px;background:red;color:#fff;border:none;border-radius:5px;padding:4px 8px;cursor:pointer;}
-.add-event-box{margin:30px auto;padding:20px;width:70%;border-radius:12px;background:rgba(255,255,255,0.15);}
-.add-event-box input{padding:8px;border-radius:5px;border:none;margin:5px 0;width:90%;}
-.add-event-box button{padding:8px 15px;border:none;border-radius:5px;background:#ffd700;cursor:pointer;margin-top:5px;}
-.contact-box{margin-top:40px;background:rgba(0,0,0,0.25);padding:20px;width:70%;margin-left:auto;margin-right:auto;border-radius:10px;line-height:1.8em;font-size:18px;backdrop-filter:blur(5px);}
-footer{margin-top:60px;text-align:center;color:#fff;font-size:15px;opacity:0.6;}
-@media(max-width:768px){.event-card{width:95%;}.add-event-box{width:95%;}}
+/* Body and background */
+body {
+    margin:0;
+    padding:0;
+    font-family:"Poppins",Arial,sans-serif;
+    color:#fff;
+    background:linear-gradient(135deg,#002b5c,#004aad,#0066cc);
+    background-size:300% 300%;
+    animation:gradientMove 12s ease infinite;
+}
+@keyframes gradientMove {
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+/* Header */
+header {
+    background:rgba(0,0,0,0.35);
+    padding:20px;
+    text-align:center;
+    backdrop-filter:blur(5px);
+}
+header h2 {
+    margin:0;
+    font-size:40px;
+    letter-spacing:2px;
+    font-weight:800;
+}
+.logo {
+    width:120px;
+    height:120px;
+    margin-top:15px;
+    border-radius:50%;
+    border:3px solid #fff;
+    object-fit:cover;
+}
+
+/* Navbar */
+nav {
+    margin-top:15px;
+}
+nav a {
+    color:#fff;
+    text-decoration:none;
+    margin:0 10px;
+    font-size:18px;
+    padding:10px 20px;
+    border-radius:12px;
+    transition:all 0.3s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-weight:bold;
+}
+nav a:hover {
+    transform:scale(1.1);
+    filter:brightness(1.2);
+    text-shadow:1px 1px 3px rgba(0,0,0,0.5);
+}
+nav a.home { background:#ffd700; color:#000; }
+nav a.departments { background:#00ff7f; color:#000; }
+
+/* Container */
+.container {
+    text-align:center;
+    margin-top:50px;
+    padding:20px;
+}
+
+/* Titles */
+.title {
+    font-size:48px;
+    font-weight:bold;
+    margin-bottom:10px;
+    text-transform:uppercase;
+}
+.subtitle {
+    font-size:22px;
+    font-weight:300;
+    opacity:0.9;
+    margin-bottom:40px;
+}
+
+/* Scripture box */
+.scripture-box {
+    background:rgba(255,255,255,0.15);
+    padding:30px;
+    width:75%;
+    margin:auto;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,0.3);
+    font-style:italic;
+    line-height:1.7em;
+    font-size:22px;
+    backdrop-filter:blur(6px);
+    min-height:150px;
+}
+.scripture-ref {
+    margin-top:15px;
+    font-size:18px;
+    text-align:right;
+    font-weight:600;
+}
+
+/* Events */
+.events-section {
+    margin-top:50px;
+}
+.event-card {
+    background:rgba(255,255,255,0.15);
+    padding:15px;
+    margin:15px auto;
+    width:80%;
+    border-radius:12px;
+    text-align:center;
+    position:relative;
+}
+.event-card h4 {
+    margin-bottom:8px;
+}
+.event-card button {
+    position:absolute;
+    top:10px;
+    right:10px;
+    background:red;
+    color:#fff;
+    border:none;
+    border-radius:5px;
+    padding:4px 8px;
+    cursor:pointer;
+}
+
+/* Add Event Box */
+.add-event-box {
+    margin:30px auto;
+    padding:20px;
+    width:70%;
+    border-radius:12px;
+    background:rgba(255,255,255,0.15);
+}
+.add-event-box input {
+    padding:8px;
+    border-radius:5px;
+    border:none;
+    margin:5px 0;
+    width:90%;
+}
+.add-event-box button {
+    padding:8px 15px;
+    border:none;
+    border-radius:5px;
+    background:#ffd700;
+    cursor:pointer;
+    margin-top:5px;
+}
+
+/* Contact box */
+.contact-box {
+    margin-top:40px;
+    background:rgba(0,0,0,0.25);
+    padding:20px;
+    width:70%;
+    margin-left:auto;
+    margin-right:auto;
+    border-radius:10px;
+    line-height:1.8em;
+    font-size:18px;
+    backdrop-filter:blur(5px);
+}
+
+/* Footer */
+footer {
+    margin-top:60px;
+    text-align:center;
+    color:#fff;
+    font-size:15px;
+    opacity:0.6;
+}
+
+/* Responsive */
+@media(max-width:768px) {
+    .event-card { width:95%; }
+    .add-event-box { width:95%; }
+}
 </style>
 </head>
 <body>
 
 <header>
 <h2>YARA BAPTIST CHURCH</h2>
-<img src="logo.png" alt="Church Logo" class="logo">
+<img src="ad66d878-f311-4ed9-9790-ad5f3671fa30.png" alt="Church Logo" class="logo">
 <nav>
-<a href="index.html">Home</a>
-<a href="departments.html">Departments</a>
+    <a href="index.html" class="home">🏠 Home</a>
+    <a href="departments.html" class="departments">📂 Departments</a>
 </nav>
 </header>
 
@@ -73,7 +235,7 @@ footer{margin-top:60px;text-align:center;color:#fff;font-size:15px;opacity:0.6;}
 </footer>
 
 <script>
-// Random Bible Verse
+// ------------------ RANDOM BIBLE VERSE ------------------
 const verses = [
 {text:"I can do all things through Christ who strengthens me.",ref:"Philippians 4:13"},
 {text:"The Lord is my shepherd; I shall not want.",ref:"Psalm 23:1"},
@@ -85,51 +247,57 @@ const verses = [
 {text:"Draw near to God and He will draw near to you.",ref:"James 4:8"}
 ];
 function showRandomVerse(){
-const verse = verses[Math.floor(Math.random()*verses.length)];
-document.getElementById("verseBox").innerHTML=verse.text;
-document.getElementById("verseRef").innerHTML="— "+verse.ref;
+    const verse = verses[Math.floor(Math.random()*verses.length)];
+    document.getElementById("verseBox").innerHTML = verse.text;
+    document.getElementById("verseRef").innerHTML = "— " + verse.ref;
 }
 showRandomVerse();
 setInterval(showRandomVerse,8000);
 
-// Events Array
-let events = [
-{title:"Sunday Worship Service",time:"Every Sunday 10:00 AM"}
+// ------------------ EVENTS SYSTEM ------------------
+
+// Load saved events OR default
+let events = JSON.parse(localStorage.getItem("homeEvents")) || [
+    { title: "Sunday Worship Service", time: "Every Sunday 10:00 AM" }
 ];
 
-// Load department events
-events = events.concat(JSON.parse(localStorage.getItem("homeEvents"))||[]);
-events = events.concat(JSON.parse(localStorage.getItem("womenHomeEvents"))||[]);
-events = events.concat(JSON.parse(localStorage.getItem("youthHomeEvents"))||[]);
-
 const eventSection = document.getElementById("eventSection");
+
+// Render events
 function renderEvents(){
-    eventSection.innerHTML="<h3>Upcoming Church Events</h3>";
+    eventSection.innerHTML = "<h3>Upcoming Church Events</h3>";
     events.forEach((ev,index)=>{
-        const div=document.createElement("div");
-        div.className="event-card";
-        div.innerHTML=`<h4>${ev.title}</h4><p>${ev.time}</p>
-        <button onclick="removeEventHome(${index})">Remove</button>`;
+        const div = document.createElement("div");
+        div.className = "event-card";
+        div.innerHTML = `
+            <h4>${ev.title}</h4>
+            <p>${ev.time}</p>
+            <button onclick="removeEventHome(${index})">Remove</button>
+        `;
         eventSection.appendChild(div);
     });
 }
 
-// Add event from homepage
+// Add new event
 function addEventHome(){
-    const title=document.getElementById("newEventTitle").value.trim();
-    const time=document.getElementById("newEventTime").value.trim();
+    const title = document.getElementById("newEventTitle").value.trim();
+    const time = document.getElementById("newEventTime").value.trim();
     if(title && time){
         events.push({title,time});
+        localStorage.setItem("homeEvents",JSON.stringify(events));
         document.getElementById("newEventTitle").value="";
         document.getElementById("newEventTime").value="";
         renderEvents();
-    } else { alert("Please enter both title and time"); }
+    } else {
+        alert("Please enter both title and time");
+    }
 }
 
 // Remove event
 function removeEventHome(index){
     if(confirm("Are you sure you want to remove this event?")){
         events.splice(index,1);
+        localStorage.setItem("homeEvents",JSON.stringify(events));
         renderEvents();
     }
 }

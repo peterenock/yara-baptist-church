@@ -12,8 +12,8 @@ nav a{color:#fff;text-decoration:none;margin:0 15px;font-size:18px;padding:8px 1
 nav a:hover{background:rgba(255,255,255,0.2);}
 .container{max-width:1000px;margin:50px auto;padding:0 20px;text-align:center;}
 .content-box{background:rgba(255,255,255,0.15);padding:20px;border-radius:15px;line-height:1.6em;margin-bottom:20px;}
-.events, .announcements{margin:30px auto;padding:20px;border-radius:15px;background:rgba(255,255,255,0.15);}
-.events h3,.announcements h3{text-align:center;margin-bottom:15px;}
+.events, .announcements, .registration{margin:30px auto;padding:20px;border-radius:15px;background:rgba(255,255,255,0.15);}
+.events h3,.announcements h3,.registration h3{text-align:center;margin-bottom:15px;}
 .event-cards{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;}
 .event-card{background:rgba(255,255,255,0.25);padding:15px;border-radius:15px;width:220px;transition:0.3s;text-align:center;}
 .event-card:hover{background:rgba(255,255,255,0.35);transform:scale(1.05);}
@@ -31,6 +31,7 @@ footer{text-align:center;margin-top:50px;font-size:15px;opacity:0.6;}
 <a href="index.html">Home</a>
 <a href="departments.html">Departments</a>
 <a href="youth.html">Youth</a>
+<a href="attendance.html">Attendance</a>
 </nav>
 </header>
 
@@ -39,7 +40,12 @@ footer{text-align:center;margin-top:50px;font-size:15px;opacity:0.6;}
 
 <div class="content-box">
 <h3>Purpose</h3>
-<p>Engaging youth in fellowship, leadership, and spiritual growth activities.</p>
+<p>Engaging youth in fellowship, mentorship, and spiritual growth activities.</p>
+</div>
+
+<div class="content-box">
+<h3>Weekly Meetings</h3>
+<p>Every Saturday at 4:00 PM in the church hall.</p>
 </div>
 
 <!-- PASSWORD PROTECTION -->
@@ -51,6 +57,14 @@ if(entered !== PASSWORD){
     window.location.href = "departments.html";
 }
 </script>
+
+<!-- MEMBER REGISTRATION -->
+<div class="registration">
+<h3>Register as a Youth Member</h3>
+<input type="text" id="memberName" placeholder="Full Name"><br>
+<input type="text" id="memberPhone" placeholder="Phone Number"><br>
+<button onclick="registerMember()">Register</button>
+</div>
 
 <!-- ANNOUNCEMENTS -->
 <div class="announcements">
@@ -75,8 +89,23 @@ if(entered !== PASSWORD){
 <footer>&copy; 2025 Yara Baptist Church — Growing in Grace ✝️</footer>
 
 <script>
-// Youth Events
-let events = [{title:"Youth Fellowship", time:"Every Friday 5:00 PM"}];
+// ====== MEMBER REGISTRATION ======
+function registerMember(){
+    const name = document.getElementById("memberName").value.trim();
+    const phone = document.getElementById("memberPhone").value.trim();
+    if(!name || !phone){ alert("All fields are required."); return; }
+
+    let youthMembers = JSON.parse(localStorage.getItem("youthMembers")) || [];
+    youthMembers.push({name, phone});
+    localStorage.setItem("youthMembers", JSON.stringify(youthMembers));
+
+    alert("Member registered successfully!");
+    document.getElementById("memberName").value = "";
+    document.getElementById("memberPhone").value = "";
+}
+
+// ====== EVENTS ======
+let events = JSON.parse(localStorage.getItem("youthEvents")) || [{title:"Youth Fellowship", time:"Every Saturday 4:00 PM"}];
 const eventContainer = document.getElementById("eventCards");
 function renderEvents(){
     eventContainer.innerHTML="";
@@ -94,16 +123,21 @@ function addEvent(){
     const time=document.getElementById("eventTime").value.trim();
     if(title && time){
         events.push({title,time});
+        localStorage.setItem("youthEvents", JSON.stringify(events));
         document.getElementById("eventTitle").value="";
         document.getElementById("eventTime").value="";
         renderEvents();
     } else { alert("Please enter both title and time"); }
 }
-function removeEvent(index){ events.splice(index,1); renderEvents(); }
+function removeEvent(index){
+    events.splice(index,1);
+    localStorage.setItem("youthEvents", JSON.stringify(events));
+    renderEvents();
+}
 renderEvents();
 
-// Announcements
-let announcements=[];
+// ====== ANNOUNCEMENTS ======
+let announcements = JSON.parse(localStorage.getItem("youthAnnouncements")) || [];
 const announcementList=document.getElementById("announcementList");
 function renderAnnouncements(){
     announcementList.innerHTML="";
@@ -117,20 +151,28 @@ function renderAnnouncements(){
 }
 function addAnnouncement(){
     const text=document.getElementById("announcementInput").value.trim();
-    if(text){ announcements.push(text); document.getElementById("announcementInput").value=""; renderAnnouncements(); }
-    else{ alert("Please type an announcement"); }
+    if(text){
+        announcements.push(text);
+        localStorage.setItem("youthAnnouncements", JSON.stringify(announcements));
+        document.getElementById("announcementInput").value="";
+        renderAnnouncements();
+    } else { alert("Please type an announcement"); }
 }
-function removeAnnouncement(index){ announcements.splice(index,1); renderAnnouncements(); }
+function removeAnnouncement(index){
+    announcements.splice(index,1);
+    localStorage.setItem("youthAnnouncements", JSON.stringify(announcements));
+    renderAnnouncements();
+}
 
-// Send to homepage
+// ====== SEND EVENTS TO HOME ======
 function sendToHome(){
     let sentCount=0;
     events.forEach((ev,index)=>{
         const checkbox=document.getElementById(`push${index}`);
         if(checkbox && checkbox.checked){
-            let homeEvents=JSON.parse(localStorage.getItem("youthHomeEvents"))||[];
+            let homeEvents = JSON.parse(localStorage.getItem("youthHomeEvents")) || [];
             homeEvents.push(ev);
-            localStorage.setItem("youthHomeEvents",JSON.stringify(homeEvents));
+            localStorage.setItem("youthHomeEvents", JSON.stringify(homeEvents));
             checkbox.checked=false;
             sentCount++;
         }

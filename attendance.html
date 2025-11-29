@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Yara Baptist Church - Attendance</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{margin:0;padding:0;font-family:"Poppins",Arial,sans-serif;background:linear-gradient(135deg,#002b5c,#004aad,#0066cc);color:#fff;}
+header{background:rgba(0,0,0,0.35);padding:20px;text-align:center;backdrop-filter:blur(5px);}
+header h2{margin:0;font-size:36px;}
+nav a{color:#fff;text-decoration:none;margin:0 15px;font-size:18px;padding:8px 14px;border-radius:8px;transition:0.3s;}
+nav a:hover{background:rgba(255,255,255,0.2);}
+.container{max-width:1000px;margin:50px auto;padding:0 20px;text-align:center;}
+table{width:90%;margin:auto;border-collapse:collapse;margin-top:15px;}
+th,td{padding:10px;border:1px solid rgba(255,255,255,0.3);}
+button{padding:8px 15px;border:none;border-radius:5px;background:#ffd700;cursor:pointer;margin-top:15px;}
+</style>
+</head>
+<body>
+
+<header>
+<h2>YARA BAPTIST CHURCH - Attendance</h2>
+<nav>
+<a href="index.html">Home</a>
+<a href="departments.html">Departments</a>
+<a href="attendance.html">Attendance</a>
+</nav>
+</header>
+
+<div class="container">
+<h3>Sunday Attendance</h3>
+<p>Date: <span id="attendanceDate"></span></p>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th>Member Name</th>
+<th>Present</th>
+</tr>
+</thead>
+<tbody id="attendanceTable"></tbody>
+</table>
+<button onclick="saveAttendance()">Save Attendance</button>
+</div>
+
+<script>
+// Current Sunday Date
+const today = new Date().toLocaleDateString();
+document.getElementById("attendanceDate").innerText = today;
+
+// Load members from localStorage
+let menMembers = JSON.parse(localStorage.getItem("menMembers")) || [];
+let womenMembers = JSON.parse(localStorage.getItem("womenMembers")) || [];
+let youthMembers = JSON.parse(localStorage.getItem("youthMembers")) || [];
+let childrenMembers = JSON.parse(localStorage.getItem("childrenMembers")) || [];
+let attendanceRecords = JSON.parse(localStorage.getItem("attendanceRecords")) || [];
+
+// Render table
+function renderAttendance(){
+    const tbody = document.getElementById("attendanceTable");
+    tbody.innerHTML = "";
+
+    function addRows(deptName, members){
+        members.forEach((m,i)=>{
+            let displayName = m.name;
+            if(deptName === "Children") displayName += " (" + m.parent + ")";
+            const tr = document.createElement("tr");
+            const checked = attendanceRecords.find(a=>a.name===m.name && a.date===today) ? "checked" : "";
+            tr.innerHTML = `<td>${deptName}</td><td>${displayName}</td><td><input type="checkbox" id="${deptName}_${i}" ${checked}></td>`;
+            tbody.appendChild(tr);
+        });
+    }
+
+    addRows("Men", menMembers);
+    addRows("Women", womenMembers);
+    addRows("Youth", youthMembers);
+    addRows("Children", childrenMembers);
+}
+
+function saveAttendance(){
+    attendanceRecords = attendanceRecords.filter(a=>a.date!==today); // remove old records of today
+
+    function saveDept(deptName, members){
+        members.forEach((m,i)=>{
+            const checked = document.getElementById(`${deptName}_${i}`).checked;
+            if(checked){
+                attendanceRecords.push({department: deptName, name: m.name, date: today});
+            }
+        });
+    }
+
+    saveDept("Men", menMembers);
+    saveDept("Women", womenMembers);
+    saveDept("Youth", youthMembers);
+    saveDept("Children", childrenMembers);
+
+    localStorage.setItem("attendanceRecords", JSON.stringify(attendanceRecords));
+    alert("Attendance saved successfully!");
+}
+
+// Initial Render
+renderAttendance();
+</script>
+
+</body>
+</html>

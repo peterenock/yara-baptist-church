@@ -12,8 +12,8 @@ nav a{color:#fff;text-decoration:none;margin:0 15px;font-size:18px;padding:8px 1
 nav a:hover{background:rgba(255,255,255,0.2);}
 .container{max-width:1000px;margin:50px auto;padding:0 20px;text-align:center;}
 .content-box{background:rgba(255,255,255,0.15);padding:20px;border-radius:15px;line-height:1.6em;margin-bottom:20px;}
-.events, .announcements{margin:30px auto;padding:20px;border-radius:15px;background:rgba(255,255,255,0.15);}
-.events h3,.announcements h3{text-align:center;margin-bottom:15px;}
+.events, .announcements, .registration{margin:30px auto;padding:20px;border-radius:15px;background:rgba(255,255,255,0.15);}
+.events h3,.announcements h3,.registration h3{text-align:center;margin-bottom:15px;}
 .event-cards{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;}
 .event-card{background:rgba(255,255,255,0.25);padding:15px;border-radius:15px;width:220px;transition:0.3s;text-align:center;}
 .event-card:hover{background:rgba(255,255,255,0.35);transform:scale(1.05);}
@@ -31,6 +31,7 @@ footer{text-align:center;margin-top:50px;font-size:15px;opacity:0.6;}
 <a href="index.html">Home</a>
 <a href="departments.html">Departments</a>
 <a href="women.html">Women</a>
+<a href="attendance.html">Attendance</a>
 </nav>
 </header>
 
@@ -42,6 +43,11 @@ footer{text-align:center;margin-top:50px;font-size:15px;opacity:0.6;}
 <p>Empowering women through fellowship and spiritual growth activities.</p>
 </div>
 
+<div class="content-box">
+<h3>Weekly Meetings</h3>
+<p>Every Friday at 6:00 PM in the church hall.</p>
+</div>
+
 <!-- PASSWORD PROTECTION -->
 <script>
 const PASSWORD = "women2025";
@@ -51,6 +57,14 @@ if(entered !== PASSWORD){
     window.location.href = "departments.html";
 }
 </script>
+
+<!-- MEMBER REGISTRATION -->
+<div class="registration">
+<h3>Register as a Member</h3>
+<input type="text" id="memberName" placeholder="Full Name"><br>
+<input type="text" id="memberPhone" placeholder="Phone Number"><br>
+<button onclick="registerMember()">Register</button>
+</div>
 
 <!-- ANNOUNCEMENTS -->
 <div class="announcements">
@@ -75,7 +89,23 @@ if(entered !== PASSWORD){
 <footer>&copy; 2025 Yara Baptist Church — Growing in Grace ✝️</footer>
 
 <script>
-let events = [{title:"Women's Fellowship", time:"Every Friday 6:00 PM"}];
+// ====== MEMBER REGISTRATION ======
+function registerMember(){
+    const name = document.getElementById("memberName").value.trim();
+    const phone = document.getElementById("memberPhone").value.trim();
+    if(!name || !phone){ alert("All fields are required."); return; }
+
+    let womenMembers = JSON.parse(localStorage.getItem("womenMembers")) || [];
+    womenMembers.push({name, phone});
+    localStorage.setItem("womenMembers", JSON.stringify(womenMembers));
+
+    alert("Member registered successfully!");
+    document.getElementById("memberName").value = "";
+    document.getElementById("memberPhone").value = "";
+}
+
+// ====== EVENTS ======
+let events = JSON.parse(localStorage.getItem("womenEvents")) || [{title:"Women's Fellowship", time:"Every Friday 6:00 PM"}];
 const eventContainer = document.getElementById("eventCards");
 function renderEvents(){
     eventContainer.innerHTML="";
@@ -93,16 +123,21 @@ function addEvent(){
     const time=document.getElementById("eventTime").value.trim();
     if(title && time){
         events.push({title,time});
+        localStorage.setItem("womenEvents", JSON.stringify(events));
         document.getElementById("eventTitle").value="";
         document.getElementById("eventTime").value="";
         renderEvents();
     } else { alert("Please enter both title and time"); }
 }
-function removeEvent(index){ events.splice(index,1); renderEvents(); }
+function removeEvent(index){
+    events.splice(index,1);
+    localStorage.setItem("womenEvents", JSON.stringify(events));
+    renderEvents();
+}
 renderEvents();
 
-// Announcements
-let announcements=[];
+// ====== ANNOUNCEMENTS ======
+let announcements = JSON.parse(localStorage.getItem("womenAnnouncements")) || [];
 const announcementList=document.getElementById("announcementList");
 function renderAnnouncements(){
     announcementList.innerHTML="";
@@ -116,20 +151,28 @@ function renderAnnouncements(){
 }
 function addAnnouncement(){
     const text=document.getElementById("announcementInput").value.trim();
-    if(text){ announcements.push(text); document.getElementById("announcementInput").value=""; renderAnnouncements(); }
-    else{ alert("Please type an announcement"); }
+    if(text){
+        announcements.push(text);
+        localStorage.setItem("womenAnnouncements", JSON.stringify(announcements));
+        document.getElementById("announcementInput").value="";
+        renderAnnouncements();
+    } else { alert("Please type an announcement"); }
 }
-function removeAnnouncement(index){ announcements.splice(index,1); renderAnnouncements(); }
+function removeAnnouncement(index){
+    announcements.splice(index,1);
+    localStorage.setItem("womenAnnouncements", JSON.stringify(announcements));
+    renderAnnouncements();
+}
 
-// Send to homepage
+// ====== SEND EVENTS TO HOME ======
 function sendToHome(){
     let sentCount=0;
     events.forEach((ev,index)=>{
         const checkbox=document.getElementById(`push${index}`);
         if(checkbox && checkbox.checked){
-            let homeEvents=JSON.parse(localStorage.getItem("womenHomeEvents"))||[];
+            let homeEvents = JSON.parse(localStorage.getItem("womenHomeEvents")) || [];
             homeEvents.push(ev);
-            localStorage.setItem("womenHomeEvents",JSON.stringify(homeEvents));
+            localStorage.setItem("womenHomeEvents", JSON.stringify(homeEvents));
             checkbox.checked=false;
             sentCount++;
         }
